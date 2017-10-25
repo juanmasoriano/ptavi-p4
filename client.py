@@ -8,10 +8,8 @@ import socket
 import sys
 
 # Constantes. Dirección IP del servidor y contenido a enviar
-SERVER = 'localhost'
-PORT = 6001
-DIRSERV = sys.argv[1]
-PORTSERV = sys.argv[2]
+SERVER = sys.argv[1]
+PORT = int(sys.argv[2])
 LINE = sys.argv[3:]
 line = ''
 
