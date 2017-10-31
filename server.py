@@ -14,17 +14,25 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
     """
 
     def handle(self):
-        RESPUESTA = "SIP/2.0 200 OK\r\n\r\n"
-        client = {}
-        self.wfile.write(bytes(RESPUESTA, 'utf-8'))
 
+        client = {}
         l = self.rfile.read().decode('utf-8')
         l_split = l.split()
-        client["sc"] = [l_split[0]]
-        client["ip"] = [self.client_address[0]]
+        Expires = int(l_split[2])
+        RESPUESTA = "SIP/2.0 200 OK\r\n\r\n"
 
+        if Expires > 0:
+            client["sc"] = [l_split[0]]
+            client["ip"] = [self.client_address[0]]
+            self.wfile.write(bytes(RESPUESTA, 'utf-8'))
+            print("REGISTER", " ",'sip:',l_split[0]," ",'SIP/2.0\r\n')
+            print("Expires:", " ", Expires, '\r\n\r\n' )
 
-        print("REGISTER", " ",'sip:',l_split[0]," ",'SIP/2.0\r\n\r\n')
+        elif Expires == 0:
+            client = {}
+            self.wfile.write(bytes(RESPUESTA, 'utf-8'))
+            print("REGISTER", " ",'sip:',l_split[0]," ",'SIP/2.0\r\n')
+            print("Expires:", " ", '0\r\n\r\n' )
 
 
 
