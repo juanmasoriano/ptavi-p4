@@ -29,16 +29,17 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         Fecha1 = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(Expires))
 
         Tiempo = Fecha, "+" + Fecha1[11:]
+        Expiracion = time.time() + Expires
 
-
-        if time.time() + Expires > time.time():
+        if Expiracion > time.time():
             try:
                 self.json2registered()
-
                 if self.registered != {}:
                     print("REGISTER", " ",'sip:',self.registered['sc']," ",'SIP/2.0\r\n')
                     print("Expires:", " ", self.registered['expires'],'\r\n\r\n' )
                     print(self.registered)
+                elif self.registered == {}:
+                    raise FileNotFoundError
                 else:
                     raise FileNotFoundError
 
